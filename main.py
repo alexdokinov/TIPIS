@@ -6,6 +6,9 @@
 import numpy as np
 import matplotlib.pyplot as pyplot
 
+t = np.linspace(0, 1, 1000)
+frequency = [1, 2, 4, 8]
+
 
 def support_GUI():
     pyplot.xlabel('Время в секундах')
@@ -15,18 +18,19 @@ def support_GUI():
     pyplot.show()
 
 
-def spectrum(signal, freq, type_of_signal):
-    pyplot.figure(figsize=(10, 6))
+def spectrum(signal, type_of_signal, index):
     if type_of_signal:
+        pyplot.subplot(2, 2, 2)
         pyplot.title('Спектр гармонического сигнала')
     else:
+        pyplot.subplot(2, 2, 4)
         pyplot.title('Спектр цифрового сигнала')
 
     spectr = np.fft.fft(signal)
     frequency_axis = np.fft.fftfreq(len(spectr), 1 / 1000)
 
-    for a in freq:
-        pyplot.plot(frequency_axis, np.abs(spectr), label=f'Частота {a} Гц')
+    for a in frequency:
+        pyplot.plot(frequency_axis, np.abs(spectr), label=f'Частота {frequency[index]} Гц')
 
     pyplot.xlabel('Частота (Гц)')
     pyplot.ylabel('Амплитуда спектра')
@@ -36,28 +40,25 @@ def spectrum(signal, freq, type_of_signal):
     pyplot.show()
 
 
-def harmonic_signal(freq, time):
-    pyplot.figure(figsize=(10, 6))
-    for a in freq:
-        signal = np.sin(2 * np.pi * a * time)
-        pyplot.plot(t, signal, label=f'Частота {a} Гц')
+def harmonic_signal(index):
+    pyplot.subplot(2, 2, 3)
+    signal = np.sin(2 * np.pi * frequency[index] * t)
+    pyplot.plot(t, signal, label=f'Частота {frequency[index]} Гц')
     pyplot.title('Гармонический сигнал')
     support_GUI()
-    spectrum(signal, freq, 1)
+    spectrum(signal, 1, index)
 
 
-def digital_signal(freq, time):
-    pyplot.figure(figsize=(10, 6))
-    for a in freq:
-        signal = np.where(np.sin(2 * np.pi * a * time) >= 0, 1, -1)
-        pyplot.plot(t, signal, label=f'Частота {a} Гц')
+def digital_signal(index):
+    pyplot.subplot(2, 2, 1)
+    signal = np.where(np.sin(2 * np.pi * frequency[index] * t) >= 0, 1, -1)
+    pyplot.plot(t, signal, label=f'Частота {frequency[index]} Гц')
     pyplot.title('Цифровой сигнал')
     support_GUI()
-    spectrum(signal, freq, 0)
+    spectrum(signal, 0, index)
 
 
-t = np.linspace(0, 1, 1000)
-frequency = [1, 2, 4, 8]
+for i in range(1, 4):
+    digital_signal(i)
+    harmonic_signal(i)
 
-digital_signal(frequency, t)
-harmonic_signal(frequency, t)
