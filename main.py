@@ -13,9 +13,6 @@ frequency = [1, 2, 4, 8]
 def support_GUI():
     pyplot.xlabel('Время в секундах')
     pyplot.ylabel('Амплитуда')
-    pyplot.legend()
-    pyplot.grid()
-    pyplot.show()
 
 
 def spectrum(signal, type_of_signal, index):
@@ -30,20 +27,18 @@ def spectrum(signal, type_of_signal, index):
     frequency_axis = np.fft.fftfreq(len(spectr), 1 / 1000)
 
     for a in frequency:
-        pyplot.plot(frequency_axis, np.abs(spectr), label=f'Частота {frequency[index]} Гц')
+        pyplot.plot(frequency_axis, np.abs(spectr))
 
     pyplot.xlabel('Частота (Гц)')
     pyplot.ylabel('Амплитуда спектра')
-    pyplot.legend()
     pyplot.grid()
     pyplot.xlim(0, 50)
-    pyplot.show()
 
 
 def harmonic_signal(index):
     pyplot.subplot(2, 2, 3)
     signal = np.sin(2 * np.pi * frequency[index] * t)
-    pyplot.plot(t, signal, label=f'Частота {frequency[index]} Гц')
+    pyplot.plot(t, signal)
     pyplot.title('Гармонический сигнал')
     support_GUI()
     spectrum(signal, 1, index)
@@ -55,10 +50,14 @@ def digital_signal(index):
     pyplot.plot(t, signal, label=f'Частота {frequency[index]} Гц')
     pyplot.title('Цифровой сигнал')
     support_GUI()
+    pyplot.legend()
     spectrum(signal, 0, index)
 
 
-for i in range(1, 4):
+for i in range(0, 4):
+    pyplot.figure(figsize=(12, 8))
     digital_signal(i)
     harmonic_signal(i)
+    pyplot.tight_layout()
+    pyplot.show()
 
