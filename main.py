@@ -32,6 +32,7 @@ def spectrum(signal, freq, type_of_signal):
     pyplot.ylabel('Амплитуда спектра')
     pyplot.legend()
     pyplot.grid()
+    pyplot.xlim(0, 50)
     pyplot.show()
 
 
